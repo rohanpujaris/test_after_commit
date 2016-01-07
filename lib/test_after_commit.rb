@@ -56,7 +56,10 @@ ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
       transaction = original.dup
       transaction.instance_variable_set(:@records, transaction.records.dup) # deep clone of records array
       original.records.clear                                                # so that this clear doesn't clear out both copies
-      transaction.commit_records
+      begin                                              # so that this clear doesn't clear out both copies
+        transaction.commit_records
+      rescue
+      end
     end
   end
 end
